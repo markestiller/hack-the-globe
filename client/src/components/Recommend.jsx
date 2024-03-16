@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Map from "./Map.jsx";
+// import Map from "./Map.jsx";
 
 const Recommend = ({ currentLocation, hospitalInfo }) => {
   // State to set selected hospital
@@ -46,7 +46,7 @@ const Recommend = ({ currentLocation, hospitalInfo }) => {
           <div className="bg-white p-8 my-8 rounded-lg shadow-md w-80">
             <div>
               <h3 className="text-lg font-bold mb-2">Nearby Hospitals:</h3>
-              {hospitalInfo.nearestLocations.map((location, index) => (
+              {hospitalInfo.nearestFacilities.map((location, index) => (
                 <div
                   key={index}
                   className="flex flex-col border border-gray-200 p-4 rounded-lg mb-4 bg-gray-200"

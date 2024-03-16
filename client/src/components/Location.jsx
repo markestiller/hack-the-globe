@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import Recommend from "./Recommend.jsx";
 
 const Location = () => {
-  const nearbyLocations = ["21 Adelaide St", "99 King St", "44 Church St"];
+  const nearbyLocations = [
+    "Wilder Institute/Calgary Zoo",
+    "Nose Hill Park",
+    "Tomkins Park",
+  ];
 
   const [selectedLocation, setSelectedLocation] = useState("");
   const [hospitalInfo, setHospitalInfo] = useState(null);
@@ -53,7 +57,7 @@ const Location = () => {
       };
 
       // TODO: backend endpoint
-      const receivedFromBackend = await fetch("/send-facilities", {
+      const receivedFromBackend = await fetch("/hospitals", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,6 +68,36 @@ const Location = () => {
       if (!receivedFromBackend.ok) {
         throw new Error("Failed to send data to the server.");
       }
+
+      // // DUMMY DATA
+      // const receivedFromBackend = {
+      //   recommendedLocation: {
+      //     name: "St. Mercy Downtown Hospital",
+      //     waitTime: "15 minutes",
+      //     url: "http://www.stmercyhospital.com",
+      //     distance: "2.5 km",
+      //   },
+      //   nearestFacilities: [
+      //     {
+      //       name: "City Health Urgent Care",
+      //       waitTime: "25 minutes",
+      //       url: "http://www.cityhealthuc.com",
+      //       distance: "3.2 km",
+      //     },
+      //     {
+      //       name: "General Hospital East Wing",
+      //       waitTime: "30 minutes",
+      //       url: "http://www.generaleastwinghospital.com",
+      //       distance: "4.1 km",
+      //     },
+      //     {
+      //       name: "St. Mercy Downtown Hospital",
+      //       waitTime: "15 minutes",
+      //       url: "http://www.stmercyhospital.com",
+      //       distance: "2.5 km",
+      //     },
+      //   ],
+      // };
 
       // Set the hospital info state from backend response
       setHospitalInfo(receivedFromBackend);
