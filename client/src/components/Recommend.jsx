@@ -33,27 +33,25 @@ const Recommend = ({ currentLocation, hospitalInfo }) => {
               <h3 className="text-lg font-bold mb-2">Recommended Hospital:</h3>
               <div
                 className="flex flex-col border border-gray-200 p-4 rounded-lg mb-4 bg-green-300"
-                onClick={() => handleClick(hospitalInfo.recommendedLocation)}
+                onClick={() => handleClick(hospitalInfo.rec)}
               >
-                <p className="font-bold">
-                  {hospitalInfo.recommendedLocation.name}
-                </p>
-                <p>Wait Time: {hospitalInfo.recommendedLocation.waitTime}</p>
-                <p>Distance: {hospitalInfo.recommendedLocation.distance}</p>
+                <p className="font-bold">{hospitalInfo.rec.name}</p>
+                <p>Wait Time: {hospitalInfo.rec.waitTime} mins</p>
+                <p>Distance: {hospitalInfo.rec.distance}</p>
               </div>
             </div>
           </div>
           <div className="bg-white p-8 my-8 rounded-lg shadow-md w-80">
             <div>
               <h3 className="text-lg font-bold mb-2">Nearby Hospitals:</h3>
-              {hospitalInfo.nearestFacilities.map((location, index) => (
+              {hospitalInfo.add.map((location, index) => (
                 <div
                   key={index}
                   className="flex flex-col border border-gray-200 p-4 rounded-lg mb-4 bg-gray-200"
                   onClick={() => handleClick(location)}
                 >
                   <p className="font-bold">{location.name}</p>
-                  <p>Wait Time: {location.waitTime}</p>
+                  <p>Wait Time: {location.waitTime} mins</p>
                   <p>Distance: {location.distance}</p>
                 </div>
               ))}

@@ -8,7 +8,26 @@ const Location = () => {
     "Tomkins Park",
   ];
 
+  // const nearbyLocations = [
+  //   {
+  //     name: "Wilder Institute/Calgary Zoo",
+  //     lat: 51.045988059025596,
+  //     lon: -114.02363088898703,
+  //   },
+  //   {
+  //     name: "Nose Hill Park",
+  //     lat: 51.111595326834504,
+  //     lon: -114.11124496014608,
+  //   },
+  //   { name: "Tomkins Park", lat: 51.038110044692324, lon: -114.08053998898775 },
+  // ];
+
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedLocationLat, setSelectedLocationLat] =
+    useState(51.045988059025596);
+  const [selectedLocationLon, setSelectedLocationLon] =
+    useState(-114.02363088898703);
+
   const [hospitalInfo, setHospitalInfo] = useState(null);
 
   // State variable to signal when to change to Recommend
@@ -17,7 +36,7 @@ const Location = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleLocationChange = (event) => {
+  const handleLocationChange = async (event) => {
     setSelectedLocation(event.target.value);
   };
 
@@ -52,25 +71,41 @@ const Location = () => {
 
       // TODO: send current location and locations to backend and get back a json of recommended location and nearest locations
       const sendToBackend = {
-        currentLocation: selectedLocation,
+        currentLocation: [selectedLocationLat, selectedLocationLon],
         facilities: facilities,
       };
 
       // TODO: backend endpoint
-      const receivedFromBackend = await fetch("/hospitals", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sendToBackend),
-      });
+      const receivedFromBackend = await fetch(
+        "http://localhost:3000/send-hospitals",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(sendToBackend),
+        }
+      );
 
       if (!receivedFromBackend.ok) {
         throw new Error("Failed to send data to the server.");
       }
 
+      // Call another endpoint to fetch the processed data
+      const processedDataResponse = await fetch(
+        "http://localhost:3000/recommendation"
+      );
+
+      if (!processedDataResponse.ok) {
+        throw new Error("Failed to receive processed data from the server.");
+      }
+
+      // Get the processed data from the backend
+      const processedData = await processedDataResponse.json();
+      console.log("Processed data from backend:", processedData);
+
       // // DUMMY DATA
-      // const receivedFromBackend = {
+      // const processedData = {
       //   recommendedLocation: {
       //     name: "St. Mercy Downtown Hospital",
       //     waitTime: "15 minutes",
@@ -100,7 +135,7 @@ const Location = () => {
       // };
 
       // Set the hospital info state from backend response
-      setHospitalInfo(receivedFromBackend);
+      setHospitalInfo(processedData);
 
       // Move on to Recommend
       setLocationProcessed(true);
@@ -138,7 +173,7 @@ const Location = () => {
           className="bg-white p-8 rounded-lg shadow-md w-60"
         >
           <h2 className="text-2xl font-bold mb-4 justify-center text-center ">
-            MediMap🏥
+            MediDirect
           </h2>
           <select
             value={selectedLocation}
