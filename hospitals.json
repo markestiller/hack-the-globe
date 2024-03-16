@@ -1,0 +1,36 @@
+{"currentLocation":[49.22722279268534,-123.10777096297838],
+    
+    "facilities":[
+    {
+      "name": "Peace Arch Hospital",
+      "waitTime": 221,
+      "latitude": 49.03024,
+      "longitude": -122.79225
+    },
+    {
+      "name": "Langley Memorial Hospital",
+      "waitTime": 99,
+      "latitude": 49.09582,
+      "longitude": -122.61225
+    },
+    {
+      "name": "Surrey Memorial Hospital Adult",
+      "waitTime": 198,
+      "latitude": 49.17653108391345,
+      "longitude": -122.84250668831437
+    },
+    {
+        "name": "Aania Hospital Adult",
+        "waitTime": 230,
+        "latitude": 49.4789067,
+        "longitude": -122.12345
+      },
+    {
+        "name": "BCG Hospital Adult",
+        "waitTime": 100,
+        "latitude": 48.853902,
+        "longitude": -120.82789339
+    }
+  ]
+}
+  
