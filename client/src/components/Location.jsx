@@ -23,23 +23,50 @@ const Location = () => {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Dummy data for hospital information returned from backend
-      const hospitalData = {
-        nearestLocations: [
-          { name: "Hospital A", waitTime: "15 minutes", distance: "0.5 km" },
-          { name: "Hospital B", waitTime: "20 minutes", distance: "0.8 km" },
-          { name: "Hospital C", waitTime: "25 minutes", distance: "1.2 km" },
-          { name: "Hospital D", waitTime: "30 minutes", distance: "1.5 km" },
-          { name: "Hospital E", waitTime: "35 minutes", distance: "2.0 km" },
-        ],
-        recommendedLocation: {
-          name: "Hospital A",
-          waitTime: "15 minutes",
-          distance: "0.5 km",
-        },
+      // Fetch data from the API
+      const response = await fetch(
+        "https://www.albertahealthservices.ca/Webapps/WaitTimes/api/waittimes/"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data from the server.");
+      }
+
+      // Parse the JSON response
+      const data = await response.json();
+
+      // Extract data for Calgary (you can extend this for other cities)
+      const calgaryData = data.Calgary;
+      const emergencyFacilities = calgaryData.Emergency;
+
+      // Extract relevant information from emergency facilities
+      const facilities = emergencyFacilities.map((facility) => ({
+        name: facility.Name,
+        waitTime: facility.WaitTime,
+        url: facility.URL,
+      }));
+      console.log(facilities);
+
+      // TODO: send current location and locations to backend and get back a json of recommended location and nearest locations
+      const sendToBackend = {
+        currentLocation: selectedLocation,
+        facilities: facilities,
       };
 
-      setHospitalInfo(hospitalData);
+      // TODO: backend endpoint
+      const receivedFromBackend = await fetch("/send-facilities", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sendToBackend),
+      });
+
+      if (!receivedFromBackend.ok) {
+        throw new Error("Failed to send data to the server.");
+      }
+
+      // Set the hospital info state from backend response
+      setHospitalInfo(receivedFromBackend);
 
       // Move on to Recommend
       setLocationProcessed(true);
@@ -76,8 +103,8 @@ const Location = () => {
           onSubmit={handleLocationSubmit}
           className="bg-white p-8 rounded-lg shadow-md w-60"
         >
-          <h2 className="text-3xl font-bold mb-4 justify-center text-center ">
-            MediMap
+          <h2 className="text-2xl font-bold mb-4 justify-center text-center ">
+            MediMap🏥
           </h2>
           <select
             value={selectedLocation}
